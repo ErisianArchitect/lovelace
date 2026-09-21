@@ -1,0 +1,9 @@
+[package]
+name = "lovelace"
+authors = ["Ada F. <https://github.com/ErisianArchitect>"]
+version = "0.1.0"
+edition = "2024"
+license-file = "LICENSE"
+rust-version = "1.98"
+
+[dependencies]
