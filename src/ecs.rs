@@ -35,8 +35,6 @@ struct SystemQuery<
     resources: R,
 }
 
-impl SystemQuery
-
 #[repr(transparent)]
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct EcsTypeId(pub(crate) NonZeroU32);
