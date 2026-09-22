@@ -15,7 +15,7 @@ use crate::{
     },
 };
 
-pub trait Component: 'static + Sized + Any {
+pub trait Component: 'static + Any {
     fn on_add(&mut self, ecs: &mut Ecs, entity: Entity) {}
     fn on_remove(&mut self, ecs: &mut Ecs, entity: Entity) {}
 }
