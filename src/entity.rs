@@ -68,3 +68,7 @@ impl Entity {
         Self(self.0 + Self::GENERATION_INCR)
     }
 }
+
+pub struct EntityData {
+    
+}

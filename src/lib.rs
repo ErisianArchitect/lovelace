@@ -1,5 +1,6 @@
 mod util;
 
+pub mod alloc;
 pub mod refs;
 pub mod component;
 pub mod ecs;

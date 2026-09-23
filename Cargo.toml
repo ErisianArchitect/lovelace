@@ -6,4 +6,9 @@ edition = "2024"
 license-file = "LICENSE"
 rust-version = "1.98"
 
+[target.'cfg(unix)'.dependencies]
+rustix = { version = "1.1.5", features = ["mm", "param"] }
+
+[target.'cfg(windows)'.dependencies]
+
 [dependencies]

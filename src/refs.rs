@@ -127,12 +127,18 @@ impl World {
     }
 }
 
+struct EcsBridge<'a> {
+    ecs: NonNull<crate::Ecs>,
+    _phantom: PhantomData<(&'a (),)>,
+}
+
 fn foo(
     ecs: &mut crate::Ecs,
+    entity: u64,
     mut world: ResMut<World>,
-    _phys: ResMut<Physics>,
+    mut _phys: ResMut<Physics>,
+    mut _b: RefMut<u32>,
     _a: Ref<u32>,
-    _b: RefMut<u32>,
 ) {
     world.explode(3.0, [0.0; 3]);
 }
