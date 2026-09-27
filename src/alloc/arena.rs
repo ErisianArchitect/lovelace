@@ -29,7 +29,7 @@ use crate::{
 
 
 
-#[repr(C)]
+#[repr(transparent)]
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct ABox<'arena, T: 'arena + Sized> {
     ptr: NonNull<T>,
@@ -39,7 +39,7 @@ pub struct ABox<'arena, T: 'arena + Sized> {
 impl<'a, T: 'a + Sized> ABox<'a, T> {
     #[must_use]
     #[inline(always)]
-    fn new(ptr: NonNull<T>) -> Self {
+    pub(crate) fn new(ptr: NonNull<T>) -> Self {
         Self {
             ptr,
             _phantom: PhantomData,
