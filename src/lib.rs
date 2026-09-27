@@ -1,5 +1,6 @@
 mod util;
 
+pub mod storage;
 pub mod alloc;
 pub mod refs;
 pub mod component;

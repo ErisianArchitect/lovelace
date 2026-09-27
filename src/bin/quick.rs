@@ -12,6 +12,7 @@ use lovelace::{
         dealloc,
         arena::{
             Arena,
+            ArenaCheckout,
             ABox,
         }
     },
@@ -27,27 +28,27 @@ struct Fred {
     baz: &'static str,
 }
 
-impl Drop for Fred {
-    fn drop(&mut self) {
-        // println!("Drop Foo: {}", self.foo);
-        // println!("Drop Bar: {}", self.bar);
-        // println!("Drop Baz: {}", self.baz);
-    }
-}
+// impl Drop for Fred {
+//     fn drop(&mut self) {
+//         if const { PRINT } {
+//             println!("Fred: {}", self.baz);
+//         }
+//     }
+// }
 
 struct Bob<'a> {
     fred1: ABox<'a, Fred>,
     fred2: ABox<'a, Fred>,
 }
 
-impl<'a> Drop for Bob<'a> {
-    fn drop(&mut self) {
-        // println!("Fred 1: {}", self.fred1.baz);
-        // println!("Fred 2: {}", self.fred2.baz);
-    }
-}
+// impl<'a> Drop for Bob<'a> {
+//     fn drop(&mut self) {
+//         // println!("Fred 1: {}", self.fred1.baz);
+//         // println!("Fred 2: {}", self.fred2.baz);
+//     }
+// }
 
-fn add_to_arena<'a>(arena: &'a Arena) -> ABox<'a, Bob<'a>> {
+fn add_to_arena<'a>(arena: &'a ArenaCheckout<'a>) -> ABox<'a, Bob<'a>> {
     let fred1 = arena.add(Fred {
         foo: 1,
         bar: 2,
@@ -64,27 +65,29 @@ fn add_to_arena<'a>(arena: &'a Arena) -> ABox<'a, Bob<'a>> {
     })
 }
 
+const PRINT: bool = false;
+
 pub fn main() {
     {
-        let arena = Arena::new(1024*1024*1024);
-        let mut bob_count = 0u64;
+        let mut arena = Arena::new(1024*1024*1024);
         let start = std::time::Instant::now();
-        for i in 0..1000000 {
-            let mut bob = add_to_arena(&arena);
-            let fred = arena.add(Fred {
+        // for _ in 0..2 {
+        for i in 0..1_000_000 {
+        // {
+            let alloc = arena.checkout();
+            let mut bob = add_to_arena(&alloc);
+            let fred = alloc.add(Fred {
                 foo: 1,
                 bar: 2,
                 baz: "Hmm",
             });
-            bob.fred1.baz = "Changed.";
+            // println!("Setting fred2.");
             bob.fred2 = fred;
-            bob_count += bob.fred1.foo;
-            arena.clear(true);
-            arena.clear(true);
+            // println!("After assignment.");
+            // take_bob(bob);
+            // println!("--- Dropping ---");
         }
         let elapsed = start.elapsed();
-        println!("Count: {bob_count}");
-        println!("--- Dropping ---");
         println!("Time: {elapsed:.3?}");
         drop(arena);
     }
